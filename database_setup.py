@@ -1,11 +1,9 @@
 import sys
 
-from sqlalchemy import
-Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 
-from sqlalchemy.ext.declarative import
-declarative_base
+from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -49,4 +47,4 @@ class Item(Base):
     description = Column(String(180))
     id   = Column(Integer, primary_key = True)
     sub_category_id = Column(Integer, ForeignKey('sub_category.id'))
-    sub_category = relationship(Sub_Category)       
+    sub_category = relationship(Sub_Category)
