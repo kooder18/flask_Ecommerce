@@ -18,6 +18,10 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+'''
+This block is the routes for the main page and
+categories
+'''
 @app.route('/')
 @app.route('/category/')
 def showCategories():
@@ -27,6 +31,49 @@ def showCategories():
 def newCategory():
     return "This where new categories are added"
 
+@app.route('/category/category_id/edit')
+def editCategory():
+    return "This is where categories are edited"
+
+@app.route('/category/category_id/delete')
+def deleteCategory():
+    return "This is where categories are deleted"
+
+'''
+This block is for the sub_category routes
+'''
+
+@app.route('/category/category_id/sub_category/')
+def showSubCategories():
+    return "This is where the sub categories are displayed"
+
+@app.route('/category/category_id/sub_category/new')
+def newSubCategory():
+    return "This is where the sub categories are created"
+
+@app.route('/category/category_id/sub_category/sub_category_id/edit')
+def editSubCategory():
+    return "This is where sub categories are edited"
+
+@app.route('/category/category_id/sub_category/sub_category_id/delete')
+def deleteSubCategory():
+    return "This is where sub categories are deleted"
+
+@app.route('/category/category_id/sub_category/sub_category_id/item')
+def showItems():
+    return "This is where the items are displayed"
+
+@app.route('/category/category_id/sub_category/sub_category_id/item/new')
+def createItem():
+    return "This is where items are created"
+
+@app.route('/category/category_id/sub_category/sub_category_id/item/item_id/edit')
+def editItem():
+    return "This is where items are edited"
+
+@app.route('/category/category_id/sub_category/sub_category_id/item/item_id/delete')
+def deleteItem():
+    return "This is where items are deleted"                
 
 
 if __name__ =='__main__':
