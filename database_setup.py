@@ -24,27 +24,16 @@ class Category(Base):
         'id'        : self.id,
         }
 
-class Sub_Category(Base):
-    __tablename__ ='sub_category'
-    name = Column(String(80), nullable = False)
-    img  = Column(String(180))
-    id   = Column(Integer, primary_key = True)
-    category_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship(Category)
-
-    @property
-    def serialize(self):
-        return {
-        'name'      : self.name,
-        'img'       : self.img,
-        'id'        : self.id
-        }
-
 class Item(Base):
     __tablename__ = 'item'
     name = Column(String(80), nullable = False)
     img  = Column(String(180))
     description = Column(String(180))
     id   = Column(Integer, primary_key = True)
-    sub_category_id = Column(Integer, ForeignKey('sub_category.id'))
-    sub_category = relationship(Sub_Category)
+    category_id = Column(Integer, ForeignKey('category.id'))
+    category = relationship(Category)
+
+
+engine = create_engine('sqlite:///catalogue.db')
+
+Base.metadata.create_all(engine)
