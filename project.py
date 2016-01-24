@@ -6,13 +6,13 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Sub_Category, Item
+from database_setup import Base, Category, Item
 import login_auth
 
 #Connect to Database and create Database session
 APPLICATION_NAME = "Item Catalogue"
 
-engine = create_engine('sqlite:///catalogueitems.db')
+engine = create_engine('sqlite:///catalogue.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -25,7 +25,15 @@ categories
 @app.route('/')
 @app.route('/category/')
 def showCategories():
-    return "This is the main page"
+    category = session.query(Category).first()
+    items = session.query(Item).filter_by(category_id = category.id)
+    output = ''
+    for i in items:
+        output += i.name
+        output += '</br>'
+        output += i.description
+        output += '</br>'
+    return output
 
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
@@ -39,41 +47,21 @@ def editCategory():
 def deleteCategory():
     return "This is where categories are deleted"
 
-'''
-This block is for the sub_category routes
-'''
-
-@app.route('/category/category_id/sub_category/')
-def showSubCategories():
-    return "This is where the sub categories are displayed"
-
-@app.route('/category/category_id/sub_category/new')
-def newSubCategory():
-    return "This is where the sub categories are created"
-
-@app.route('/category/category_id/sub_category/sub_category_id/edit')
-def editSubCategory():
-    return "This is where sub categories are edited"
-
-@app.route('/category/category_id/sub_category/sub_category_id/delete')
-def deleteSubCategory():
-    return "This is where sub categories are deleted"
-
-@app.route('/category/category_id/sub_category/sub_category_id/item')
+@app.route('/category/category_id/item')
 def showItems():
     return "This is where the items are displayed"
 
-@app.route('/category/category_id/sub_category/sub_category_id/item/new')
+@app.route('/category/category_id/item/new')
 def createItem():
     return "This is where items are created"
 
-@app.route('/category/category_id/sub_category/sub_category_id/item/item_id/edit')
+@app.route('/category/category_id/item/item_id/edit')
 def editItem():
     return "This is where items are edited"
 
-@app.route('/category/category_id/sub_category/sub_category_id/item/item_id/delete')
+@app.route('/category/category_id/item/item_id/delete')
 def deleteItem():
-    return "This is where items are deleted"                
+    return "This is where items are deleted"
 
 
 if __name__ =='__main__':
