@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Item Catalogue</title>
+</head>
+<body>
+  <h1>{{ category.name }}</h1>
+
+  {% for i in items %}
+  {{ i.name }}
+</br>
+
+{{ i.description }}
+</br>
+  <a href="{{url_for('editCategoryItem', name =
+  category.name, item_name = i.name)}}">Edit</a>
+
+</br>
+<a href="{{url_for('deleteCategoryItem', name =
+  category.name, item_name = i.name)}}">Delete</a>
+{% endfor %}
+
+</body>
+</html>
