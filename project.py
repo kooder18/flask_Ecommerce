@@ -25,9 +25,14 @@ categories
 @app.route('/')
 @app.route('/category/')
 def showCategories():
-    category = session.query(Category).first()
-    items = session.query(Item).filter_by(category_id = category.id)
-    return render_template('index.html', category = category, items=items)
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
+    #output = ''
+    #for i in categorys:
+    #    output += i.name
+    #    output += '</br>'
+    #return output
+    return render_template('categories.html', categories = categories, items = items)
 
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
@@ -75,9 +80,16 @@ def newCategoryItem(name):
 def createItem():
     return "This is where items are created"
 
-@app.route('/category/<string:name>/<string:item_name>/edit/')
+@app.route('/category/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
 def editCategoryItem(name, item_name):
-    return "This is where items are edited"
+    editedItem = session.query(Item).filter_by(item_name = name).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editedItem.name = request.form['name']
+        session.add(editedItem)
+        session.commit()
+        return redirect(url_for('showCategories', name = name, ))
+
 
 @app.route('/category/<string:name>/<string:item_name>/delete/')
 def deleteCategoryItem(name, item_name):

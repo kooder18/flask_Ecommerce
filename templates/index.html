@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Item Catalogue</title>
-</head>
-<body>
+{% extends "main.html" %}
+{% block content %}
   <h1>{{ category.name }}</h1>
-
   {% for i in items %}
   {{ i.name }}
 </br>
@@ -21,5 +15,4 @@
   category.name, item_name = i.name)}}">Delete</a>
 {% endfor %}
 
-</body>
-</html>
+{% endblock %}

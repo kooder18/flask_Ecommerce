@@ -1,0 +1,16 @@
+
+body {
+  background: #FFFFCC;
+}
+
+/*
+Styling for divs on home page
+*/
+
+.catdisplay {
+  float: left;
+}
+
+.itemdisplay {
+  float: right;
+}

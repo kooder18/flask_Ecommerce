@@ -30,8 +30,8 @@ with contextlib.closing(engine.connect()) as con:
 
 This code will empty all tables in reverse order so children are deleted
 before parents
-'''
 
+'''
 
 
 ##################First Category and Items################################

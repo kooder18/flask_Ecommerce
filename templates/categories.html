@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% block content %}
+
+
+  <main>
+    <div class="catdisplay">
+      {% for i in categories %}
+        {{i.name}}
+        </br>
+      {% endfor %}
+    </div>
+    <div class="itemdisplay">
+      {% for i in items %}
+        {{i.name}}
+        </br>
+        ({{i.category.name}})
+        </br>
+      {% endfor %}
+
+    </div>
+  </main>
+
+{% endblock %}
