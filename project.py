@@ -31,7 +31,8 @@ def showCategories():
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def newCategory():
-    return "This where new categories are added"
+    categories = session.query(Category).all()
+    return render_template('newCategory.html', categories = categories)
 
 @app.route('/catalog/<string:name>/edit/')
 def editCategory(name):
