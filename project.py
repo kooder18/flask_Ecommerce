@@ -31,21 +31,22 @@ def showCategories():
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def newCategory():
-    categories = session.query(Category).all()
-    return render_template('newCategory.html', categories = categories)
+    if request.method == 'POST':
+        newCategory = Category(name = request.form['categoryName'])
+        session.add(newCategory)
+        #flash('New Category %s Successfully Added' % newCategory.name)
+        session.commit()
+        return redirect(url_for('showCategories'))
+    else:
+        categories = session.query(Category).all()
+        return render_template('newCategory.html', categories = categories)
 
 @app.route('/catalog/<string:name>/edit/')
 def editCategory(name):
     category = session.query(Category).filter_by(name = name).one()
     id = category.id
     items = session.query(Item).filter_by(category_id = category.id)
-    output = ''
-    for i in items:
-        output += i.name
-        output += '</br>'
-        output += i.description
-        output += '</br>'
-    return output
+    return render_template('categoryDisplay.html', category = category, items = items)
 
 @app.route('/catalog/<string:name>/delete/')
 def deleteCategory(name):

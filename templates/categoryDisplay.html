@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="catdisplay">
+  {{category.name}}
+  <a href="{{url_for('showCategories')}}">Home</a>
+</div>
+
+<div class="itemdisplay">
+  <h2>Items in {{category.name}}</h2>
+  {% for i in items %}
+    {{i.name}}
+    </br>
+  {% endfor %}
+
+</div>
+
+
+
+{% endblock %}

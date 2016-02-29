@@ -11,9 +11,9 @@
   </div>
   <div class="newcat">
     <h2>New Category Information</h2>
-    <form>
+    <form method ="post">
       Category Name: </br>
-      <input type="text" name = "categoryName"></br>
+      <input type="text" maxlength="100" name = "categoryName"></br>
       <input type="submit" value ="Submit">
     </form>
     <a href="{{url_for('showCategories')}}">Home</a>
