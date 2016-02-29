@@ -23,22 +23,17 @@ This block is the routes for the main page and
 categories
 '''
 @app.route('/')
-@app.route('/category/')
+@app.route('/catalog/')
 def showCategories():
     categories = session.query(Category).all()
     items = session.query(Item).all()
-    #output = ''
-    #for i in categorys:
-    #    output += i.name
-    #    output += '</br>'
-    #return output
     return render_template('categories.html', categories = categories, items = items)
 
-@app.route('/category/new/', methods=['GET', 'POST'])
+@app.route('/catalog/new/', methods=['GET', 'POST'])
 def newCategory():
     return "This where new categories are added"
 
-@app.route('/category/<string:name>/edit/')
+@app.route('/catalog/<string:name>/edit/')
 def editCategory(name):
     category = session.query(Category).filter_by(name = name).one()
     id = category.id
@@ -51,7 +46,7 @@ def editCategory(name):
         output += '</br>'
     return output
 
-@app.route('/category/<string:name>/delete/')
+@app.route('/catalog/<string:name>/delete/')
 def deleteCategory(name):
     category = session.query(Category).filter_by(name = name).one()
     id = category.id
@@ -64,7 +59,7 @@ def deleteCategory(name):
         output += '</br>'
     return output
 
-@app.route('/category/<string:name>/new/', methods=['GET', 'POST'])
+@app.route('/catalog/<string:name>/new/', methods=['GET', 'POST'])
 def newCategoryItem(name):
     if request.method == 'POST':
         newItem = Item(name = request.form['name'])
@@ -76,11 +71,11 @@ def newCategoryItem(name):
         return render_template('newCategoryItem.html', name = name)
     return "page to create a new item Task 1 complete"
 
-@app.route('/category/category_id/item/new')
+@app.route('/catalog/category_id/item/new')
 def createItem():
     return "This is where items are created"
 
-@app.route('/category/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
+@app.route('/catalog/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
 def editCategoryItem(name, item_name):
     editedItem = session.query(Item).filter_by(item_name = name).one()
     if request.method == 'POST':
@@ -91,7 +86,7 @@ def editCategoryItem(name, item_name):
         return redirect(url_for('showCategories', name = name, ))
 
 
-@app.route('/category/<string:name>/<string:item_name>/delete/')
+@app.route('/catalog/<string:name>/<string:item_name>/delete/')
 def deleteCategoryItem(name, item_name):
     return "This is where items are deleted"
 
