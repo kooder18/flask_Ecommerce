@@ -6,7 +6,7 @@
     <div class="catdisplay">
       <h2>Categories</h2>
       {% for i in categories %}
-        {{i.name}}
+        <a href="{{url_for('editCategory', name = i.name)}}">{{i.name}}</a>
         </br>
       {% endfor %}
       <a href="{{url_for('newCategory')}}">Add Category</a>
