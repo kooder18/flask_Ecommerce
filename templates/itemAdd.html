@@ -3,7 +3,23 @@
 
 <main>
   <div class="itemAdd">
-    
+    <h2>Add Item</h2>
+    <form method="post">
+      Title:
+      </br>
+      <input type="text" maxlength="100" name="itemName"></br>
+      Description:
+      </br>
+      <input type="text" maxlength="500" name="itemdescript"></br>
+      Category:
+      </br>
+      <select name="category">
+        {% for i in categories %}
+          <option value="{{i.name}}">{{i.name}}</option>
+        {% endfor %}
+        <input type="submit" value ="Submit">
+
+    </form>
   </div>
 </main>
 
