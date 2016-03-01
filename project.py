@@ -71,21 +71,35 @@ def createItem():
         categories = session.query(Category).all()
         return render_template('itemAdd.html', categories = categories)
 
+#Displays item information has links to edit delete item
 @app.route('/catalog/<string:name>/<string:item_name>/')
 def showItem(name, item_name):
     item = session.query(Item).filter_by(name = item_name).one()
     return render_template('itemDisplay.html', item = item)
 
-
+#Allows user to edit item
 @app.route('/catalog/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
 def editCategoryItem(name, item_name):
-    editedItem = session.query(Item).filter_by(item_name = name).one()
+    item = session.query(Item).filter_by(name = item_name).one()
+    category = session.query(Category).filter_by(name = name).one()
+    #Query all categories to populate drop down list in template
+    categories = session.query(Category).all()
     if request.method == 'POST':
-        if request.form['name']:
-            editedItem.name = request.form['name']
-        session.add(editedItem)
+        if request.form['itemName']:
+            item.name = request.form['itemName']
+        if request.form['itemdescript']:
+            item.description = request.form['itemdescript']
+        if request.form['category']:
+            category = request.form['category']
+            category1 = session.query(Category).filter_by(name = category).one()
+            print(item.category.name)
+            item.category = category1
+            print(item.category.name)
+        session.add(item)
         session.commit()
-        return redirect(url_for('showCategories', name = name, ))
+        return redirect(url_for('editCategory', name = item.category.name))
+    else:
+        return render_template('itemEdit.html', item =item, categories = categories)
 
 
 

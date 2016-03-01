@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="itemDisplay">
+  <h3>Description:</h3>
+  <p>{{item.description}}</p>
+  <a href="{{url_for('editCategoryItem', name = item.category.name, item_name=item.name)}}">Edit</a>
+  <a href="#">Delete</a>
+  <a href="{{url_for('showCategories')}}">Home</a>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="itemEdit">
+  <h2>Edit Item</h2>
+  <a href="{{url_for('showCategories')}}">Home</a>
+  <form method="post">
+    Title:
+    </br>
+    <input type="text" maxlength="100" name="itemName">{{item.name}}</br>
+    Description:
+    </br>
+    <input type="text" maxlength="500" name="itemdescript">{{item.description}}</br>
+    Category:
+    </br>
+    <select name="category">
+      {% for i in categories %}
+        <option value="{{i.name}}">{{i.name}}</option>
+      {% endfor %}
+      <input type="submit" value ="Submit">
+
+</div>
+
+
+
+{% endblock %}
