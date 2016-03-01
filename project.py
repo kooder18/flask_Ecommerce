@@ -115,6 +115,11 @@ def deleteCategoryItem(name, item_name):
         return render_template('deleteItem.html', name = item_name)
 
 
+#The following are routes for basic error handling
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
+
 if __name__ =='__main__':
     app.debug = True
     app.run(host = '0.0.0.0', port = 5000)
