@@ -60,16 +60,22 @@ def editCategory(name):
 def createItem():
     if request.method == 'POST':
         category = request.form['category']
+        #Get category object from db that is equal to name selected from form
         category1 = session.query(Category).filter_by(name = category).one()
         newItem = Item(name = request.form['itemName'], description =
         request.form['itemdescript'], category = category1)
         session.add(newItem)
         session.commit()
-
         return redirect(url_for('showCategories'))
     else:
         categories = session.query(Category).all()
         return render_template('itemAdd.html', categories = categories)
+
+@app.route('/catalog/<string:name>/<string:item_name>/')
+def showItem(name, item_name):
+    item = session.query(Item).filter_by(name = item_name).one()
+    return render_template('itemDisplay.html', item = item)
+
 
 @app.route('/catalog/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
 def editCategoryItem(name, item_name):
@@ -80,6 +86,8 @@ def editCategoryItem(name, item_name):
         session.add(editedItem)
         session.commit()
         return redirect(url_for('showCategories', name = name, ))
+
+
 
 
 @app.route('/catalog/<string:name>/<string:item_name>/delete/')
