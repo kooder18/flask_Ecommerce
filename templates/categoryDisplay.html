@@ -11,6 +11,7 @@
 
 <div class="itemdisplay">
   <h2>Items in {{category.name}}</h2>
+  <a href="{{url_for('createItem')}}">Add Item</a></br>
   {% for i in items %}
       <a href="{{url_for('showItem', name = i.category.name, item_name=i.name)}}">{{i.name}}</a>
     </br>

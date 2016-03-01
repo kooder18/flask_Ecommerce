@@ -91,10 +91,9 @@ def editCategoryItem(name, item_name):
             item.description = request.form['itemdescript']
         if request.form['category']:
             category = request.form['category']
+            #Search database to get category object
             category1 = session.query(Category).filter_by(name = category).one()
-            print(item.category.name)
             item.category = category1
-            print(item.category.name)
         session.add(item)
         session.commit()
         return redirect(url_for('editCategory', name = item.category.name))
@@ -102,11 +101,18 @@ def editCategoryItem(name, item_name):
         return render_template('itemEdit.html', item =item, categories = categories)
 
 
+#This route deletes items
 
-
-@app.route('/catalog/<string:name>/<string:item_name>/delete/')
+@app.route('/catalog/<string:name>/<string:item_name>/delete/', methods =['GET', 'POST'])
 def deleteCategoryItem(name, item_name):
-    return "This is where items are deleted"
+    category = session.query(Category).filter_by(name = name).one()
+    itemdelete = session.query(Item).filter_by(name = item_name).one()
+    if request.method == 'POST':
+        session.delete(itemdelete)
+        session.commit()
+        return redirect(url_for('editCategory', name = category.name))
+    else:
+        return render_template('deleteItem.html', name = item_name)
 
 
 if __name__ =='__main__':
