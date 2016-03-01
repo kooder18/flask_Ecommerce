@@ -47,10 +47,11 @@ that category. Can edit or delete items.
 '''
 @app.route('/catalog/<string:name>/edit/')
 def editCategory(name):
+    categories = session.query(Category).all()
     category = session.query(Category).filter_by(name = name).one()
     id = category.id
     items = session.query(Item).filter_by(category_id = category.id)
-    return render_template('categoryDisplay.html', category = category, items = items)
+    return render_template('categoryDisplay.html', category=category, categories = categories, items = items)
 
 @app.route('/catalog/<string:name>/delete/')
 def deleteCategory(name):
@@ -75,9 +76,9 @@ def newCategoryItem(name):
 
     else:
         return render_template('newCategoryItem.html', name = name)
-    return "page to create a new item Task 1 complete"
 
-@app.route('/catalog/category_id/item/new')
+
+@app.route('/catalog/item/new')
 def createItem():
     return "This is where items are created"
 
