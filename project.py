@@ -53,20 +53,8 @@ def editCategory(name):
     items = session.query(Item).filter_by(category_id = category.id)
     return render_template('categoryDisplay.html', category=category, categories = categories, items = items)
 
-@app.route('/catalog/<string:name>/delete/')
-def deleteCategory(name):
-    category = session.query(Category).filter_by(name = name).one()
-    id = category.id
-    items = session.query(Item).filter_by(category_id = category.id)
-    output = ''
-    for i in items:
-        output += i.name
-        output += '</br>'
-        output += i.description
-        output += '</br>'
-    return output
 
-@app.route('/catalog/<string:name>/new/', methods=['GET', 'POST'])
+@app.route('/catalog/new/', methods=['GET', 'POST'])
 def newCategoryItem(name):
     if request.method == 'POST':
         newItem = Item(name = request.form['name'])
