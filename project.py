@@ -54,21 +54,12 @@ def editCategory(name):
     return render_template('categoryDisplay.html', category=category, categories = categories, items = items)
 
 
-@app.route('/catalog/new/', methods=['GET', 'POST'])
-def newCategoryItem(name):
-    if request.method == 'POST':
-        newItem = Item(name = request.form['name'])
-        session.add(newItem)
-        session.commit()
-        return redirect(url_for('showCategories'))
-
-    else:
-        return render_template('newCategoryItem.html', name = name)
 
 
-@app.route('/catalog/item/new')
+@app.route('/catalog/item/new/', methods=['GET', 'POST'])
 def createItem():
-    return "This is where items are created"
+    categories = session.query(Category).all()
+    return render_template('itemAdd.html', categories = categories)
 
 @app.route('/catalog/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
 def editCategoryItem(name, item_name):
