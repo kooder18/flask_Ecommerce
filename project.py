@@ -1,13 +1,19 @@
 #This file will contain the routes, to perform CRUD operations on
 #All of the items in the catalog
 
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, Blueprint, render_template, request, redirect, jsonify, url_for, flash
 app = Flask(__name__)
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item
-import login_auth
+
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
+import json
+from flask import make_response
+import requests
 
 #Connect to Database and create Database session
 APPLICATION_NAME = "Item Catalogue"
@@ -55,7 +61,7 @@ def editCategory(name):
 
 
 
-
+#Adds a new item
 @app.route('/catalog/item/new/', methods=['GET', 'POST'])
 def createItem():
     if request.method == 'POST':
@@ -114,6 +120,18 @@ def deleteCategoryItem(name, item_name):
     else:
         return render_template('deleteItem.html', name = item_name)
 
+
+#Routes for API endpoints
+@app.route('/catalog/categories/JSON')
+def catalogJSON():
+    categories = session.query(Category).all()
+    return jsonify(categories=[i.serialize for i in categories])
+
+@app.route('/catalog/<string:name>/JSON')
+def categoryItemsJSON(name):
+    category = session.query(Category).filter_by(name = name).one()
+    items = session.query(Item).filter_by(category_id = category.id)
+    return jsonify(Category= category.name, items = [i.serialize for i in items])
 
 #The following are routes for basic error handling
 @app.errorhandler(404)
