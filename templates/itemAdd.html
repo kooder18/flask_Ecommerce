@@ -1,9 +1,11 @@
 {% extends "main.html" %}
 {% block content %}
 
+<title>{% block title %}{% endblock %} Add Item</title>
 <main>
   <div class="itemAdd">
     <h2>Add Item</h2>
+    <a href="{{url_for('showCategories')}}">Home</a>
     <form method="post">
       Title:
       </br>

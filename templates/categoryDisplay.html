@@ -1,6 +1,7 @@
 {% extends "main.html" %}
 {% block content %}
-
+<title>{% block title %}{% endblock %} {{category.name}}</title>
+<main>
 <div class="catdisplay">
   {% for i in categories %}
     <a href="{{url_for('editCategory', name = i.name)}}">{{i.name}}</a>
@@ -19,6 +20,6 @@
 
 </div>
 
-
+</main>
 
 {% endblock %}

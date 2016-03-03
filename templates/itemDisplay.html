@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 {% block content %}
-
+<title>{% block title %}{% endblock %} {{item.name}}</title>
 <div class="itemDisplay">
   <h3>Description:</h3>
   <p>{{item.description}}</p>

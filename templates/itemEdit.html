@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 {% block content %}
-
+<title>{% block title %}{% endblock %} Edit {{item.name}}</title>
 <div class="itemEdit">
   <h2>Edit Item</h2>
   <a href="{{url_for('showCategories')}}">Home</a>

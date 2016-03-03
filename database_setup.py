@@ -1,6 +1,6 @@
 import sys
-
-from sqlalchemy import Column, ForeignKey, Integer, String
+import datetime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -30,6 +30,7 @@ class Item(Base):
     img  = Column(String(180))
     description = Column(String(180))
     id   = Column(Integer, primary_key = True)
+    myTime = Column(DateTime, default=datetime.datetime.utcnow)
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
 

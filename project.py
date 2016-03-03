@@ -35,7 +35,6 @@ def getCategories():
     categories = session.query(Category).all()
     return categories
 
-
 #Returns a single category based on name
 def getCategory(name):
     category = session.query(Category).filter_by(name = name).one()
@@ -51,6 +50,11 @@ def getItems(id):
     items = session.query(Item).filter_by(category_id = id)
     return items
 
+#Gets the top 15 items sorted by time added
+def getItems_time():
+    items = session.query(Item).order_by(Item.myTime.desc()).limit(15)
+    return items
+
 '''
 This block is the routes for the main page and
 categories
@@ -59,7 +63,7 @@ categories
 @app.route('/catalog/')
 def showCategories():
     categories = getCategories()
-    items = getAllItems()
+    items = getItems_time()
     return render_template('categories.html', categories = categories, items = items)
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
