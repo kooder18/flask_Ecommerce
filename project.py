@@ -14,6 +14,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+#from functions import getCategories, getCategory
 
 #Connect to Database and create Database session
 APPLICATION_NAME = "Item Catalogue"
@@ -25,14 +26,40 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 '''
+get and set functions
+
+'''
+
+#Function displays all categories
+def getCategories():
+    categories = session.query(Category).all()
+    return categories
+
+
+#Returns a single category based on name
+def getCategory(name):
+    category = session.query(Category).filter_by(name = name).one()
+    return category
+
+#Returns all items
+def getAllItems():
+    items = session.query(Item).all()
+    return items
+
+#Returns all items in a given category
+def getItems(id):
+    items = session.query(Item).filter_by(category_id = id)
+    return items
+
+'''
 This block is the routes for the main page and
 categories
 '''
 @app.route('/')
 @app.route('/catalog/')
 def showCategories():
-    categories = session.query(Category).all()
-    items = session.query(Item).all()
+    categories = getCategories()
+    items = getAllItems()
     return render_template('categories.html', categories = categories, items = items)
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
@@ -43,7 +70,7 @@ def newCategory():
         session.commit()
         return redirect(url_for('showCategories'))
     else:
-        categories = session.query(Category).all()
+        categories = getCategories()
         return render_template('newCategory.html', categories = categories)
 
 '''
@@ -54,9 +81,9 @@ that category. Can edit or delete items.
 @app.route('/catalog/<string:name>/edit/')
 def editCategory(name):
     categories = session.query(Category).all()
-    category = session.query(Category).filter_by(name = name).one()
+    category = getCategory(name)
     id = category.id
-    items = session.query(Item).filter_by(category_id = category.id)
+    items = getItems(id)
     return render_template('categoryDisplay.html', category=category, categories = categories, items = items)
 
 
@@ -67,7 +94,7 @@ def createItem():
     if request.method == 'POST':
         category = request.form['category']
         #Get category object from db that is equal to name selected from form
-        category1 = session.query(Category).filter_by(name = category).one()
+        category1 = getCategory(category)
         newItem = Item(name = request.form['itemName'], description =
         request.form['itemdescript'], category = category1)
         session.add(newItem)
@@ -87,9 +114,9 @@ def showItem(name, item_name):
 @app.route('/catalog/<string:name>/<string:item_name>/edit/', methods=['GET', 'POST'])
 def editCategoryItem(name, item_name):
     item = session.query(Item).filter_by(name = item_name).one()
-    category = session.query(Category).filter_by(name = name).one()
+    category = getCategory(name)
     #Query all categories to populate drop down list in template
-    categories = session.query(Category).all()
+    categories = getCategories()
     if request.method == 'POST':
         if request.form['itemName']:
             item.name = request.form['itemName']
@@ -98,7 +125,7 @@ def editCategoryItem(name, item_name):
         if request.form['category']:
             category = request.form['category']
             #Search database to get category object
-            category1 = session.query(Category).filter_by(name = category).one()
+            category1 = getCategory(name)
             item.category = category1
         session.add(item)
         session.commit()
@@ -111,7 +138,7 @@ def editCategoryItem(name, item_name):
 
 @app.route('/catalog/<string:name>/<string:item_name>/delete/', methods =['GET', 'POST'])
 def deleteCategoryItem(name, item_name):
-    category = session.query(Category).filter_by(name = name).one()
+    category = getCategory(name)
     itemdelete = session.query(Item).filter_by(name = item_name).one()
     if request.method == 'POST':
         session.delete(itemdelete)
@@ -123,15 +150,22 @@ def deleteCategoryItem(name, item_name):
 
 #Routes for API endpoints
 @app.route('/catalog/categories/JSON')
+# JSON endpoint for all categories
 def catalogJSON():
-    categories = session.query(Category).all()
+    categories = getCategories()
     return jsonify(categories=[i.serialize for i in categories])
 
 @app.route('/catalog/<string:name>/JSON')
+# JSON endpoint for all items in a category
 def categoryItemsJSON(name):
-    category = session.query(Category).filter_by(name = name).one()
-    items = session.query(Item).filter_by(category_id = category.id)
+    category = getCategory(name)
+    items = getItems(category.id)
     return jsonify(Category= category.name, items = [i.serialize for i in items])
+
+
+
+#The following routes pertain to user authentication and login
+@app.route('/login/')
 
 #The following are routes for basic error handling
 @app.errorhandler(404)
