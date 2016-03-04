@@ -12,7 +12,10 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
+
+import random, string
 from flask import make_response
+from flask import session as login_session
 import requests
 #from functions import getCategories, getCategory
 
@@ -54,6 +57,12 @@ def getItems(id):
 def getItems_time():
     items = session.query(Item).order_by(Item.myTime.desc()).limit(15)
     return items
+
+#Creates a random 32 digit token
+def tokenMaker():
+    token = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in range(32))
+    return token
 
 '''
 This block is the routes for the main page and
@@ -169,7 +178,11 @@ def categoryItemsJSON(name):
 
 
 #The following routes pertain to user authentication and login
-@app.route('/login/')
+@app.route('/login')
+def showLogin():
+    state = tokenMaker()
+    #login_session['state'] = state
+    return render_template('login.html')
 
 #The following are routes for basic error handling
 @app.errorhandler(404)
